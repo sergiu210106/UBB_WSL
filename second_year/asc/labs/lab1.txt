@@ -1,0 +1,49 @@
+bit
+byte
+
+base 16 -> 0,..., 9, A, ... F
+
+101(2) = 0h101
+A1(16) = 0xA1 = A1h
+
+conversii
+
+10-2, 10-16, 2-10, 16-10
+
+stocare de numere
+-A1 ?
+
+1 byte -> ________
+I. Prima varianta
+primul bit e bit de semn -> 1 negativ, 0 pozitiv 
+
+-1010(2) => 10001010
+10000000 
+00000000 => conflict
+
+II. -1010(2) => 11110101, flip la toti bitii
+III. -1010(2) => complementul lui 2
+-1010(2) => 00001010 => flip => 11110101 => add 1 => 11110110
+
+0xFF = -1 
+0xFE = -2
+
+instructions: add sub
+mul, div => only positive numbers
+
+1 byte = 8 bits
+2 bytes = word
+4 bytes = double word (dw)
+8 bytes = quad word (qw)
+
+1 nibble = 1/2 byte = 4 biti 
+
+instructions:
+    add dest, src
+    add EAX, EBX <=> EAX <- EAX + EBX
+
+    sub dest, src
+    sub EAX, EBX <=> EAX <- EAX - EBX
+
+
+

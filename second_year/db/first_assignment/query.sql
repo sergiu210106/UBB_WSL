@@ -1,0 +1,106 @@
+USE master;
+GO
+
+ALTER DATABASE ElectronicSalesDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+GO
+
+DROP DATABASE ElectronicSalesDB;
+GO  
+
+CREATE DATABASE ElectronicSalesDB;
+USE ElectronicSalesDB;
+
+CREATE TABLE ProductCategories (
+    ID INT PRIMARY KEY,
+    [Name] VARCHAR(50) NOT NULL UNIQUE,
+    [Description] VARCHAR(255)
+);
+
+
+CREATE TABLE Manufacturers (
+    ID INT PRIMARY KEY,
+    [Name] VARCHAR(50) NOT NULL UNIQUE,
+    Country VARCHAR(20)
+);
+
+CREATE TABLE Stores (
+    ID INT PRIMARY KEY,
+    [Name] VARCHAR(50) NOT NULL UNIQUE,
+    [Address] VARCHAR(255)
+);
+
+CREATE TABLE Shippers (
+    ID INT PRIMARY KEY,
+    CompanyName VARCHAR(50) NOT NULL,
+    Phone VARCHAR(20)
+);
+
+CREATE TABLE Products (
+    ID INT PRIMARY KEY,
+    [Name] VARCHAR(50) NOT NULL,
+    MID INT NOT NULL, 
+    CID INT NOT NULL,
+    Model VARCHAR(50) UNIQUE,
+    UnitPrice FLOAT NOT NULL,
+
+    FOREIGN KEY (MID) REFERENCES Manufacturers(ID),
+    FOREIGN KEY (CID) REFERENCES ProductCategories(ID) 
+);
+
+CREATE TABLE Customers (
+    ID INT PRIMARY KEY, 
+    FirstName VARCHAR(20) NOT NULL,
+    LastName VARCHAR(20) NOT NULL,
+    Email VARCHAR(100),
+    Phone VARCHAR(20),
+    [Address] VARCHAR(255) 
+);
+
+CREATE TABLE Employees (
+    ID INT PRIMARY KEY,
+    FirstName VARCHAR(20) NOT NULL,
+    LastName VARCHAR(20) NOT NULL,
+    [SID] INT,
+    Position VARCHAR(50),
+
+    FOREIGN KEY ([SID]) REFERENCES Stores(ID)
+);
+
+CREATE TABLE Sales (
+    ID INT PRIMARY KEY,
+    CID INT NOT NULL,
+    EID INT NOT NULL,
+    [SID] INT,
+    [Date] DATETIME,
+    Amount FLOAT,
+    [Status] VARCHAR(20),
+
+    FOREIGN KEY (CID) REFERENCES Customers(ID),
+    FOREIGN KEY (EID) REFERENCES Employees(ID),
+    FOREIGN KEY ([SID]) REFERENCES Shippers(ID)
+);
+
+CREATE TABLE SaleDetails (
+    ID INT PRIMARY KEY,
+    SaleID INT NOT NULL,
+    PID INT NOT NULL,
+    QUANTITY INT NOT NULL,
+    Price FLOAT NOT NULL,
+
+    FOREIGN KEY (SaleID) REFERENCES Sales(ID),
+    FOREIGN KEY (PID) REFERENCES Products(ID)
+);
+
+CREATE TABLE Inventory (
+    ID INT PRIMARY KEY,
+    PID INT NOT NULL,
+    [SID] INT NOT NULL,
+    Stock INT NOT NULL,
+    LastUpdate DATETIME,
+
+    FOREIGN KEY (PID) REFERENCES Products(ID),
+    FOREIGN KEY ([SID]) REFERENCES Stores(ID)
+);
+
+
+

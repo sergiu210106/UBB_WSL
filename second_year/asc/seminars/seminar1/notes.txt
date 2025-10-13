@@ -1,0 +1,32 @@
+reg:
+    EAX, EBX, ECX, EDX
+
+Mem:
+    a dl 1 -8
+    b dw 2 -16
+    c dd 3 -32
+    .. dq .. -64
+
+dereferencing: [c] -> to get the value at address  c
+
+instructions:
+    mov op1, op2 -> op1 = op2
+    add op1, op2 -> op1 = op1 + op2
+    sub op1, op2 -> op1 = op1 - op2 
+
+
+a db 1
+b db 2
+c dw 3
+d dw 4
+
+; (b + d) - (a + c)
+
+mov AL, [b]
+mov AH, 0
+add AX, [d] ; AX = b + d
+
+mov CL, [a]
+mov CH, 0
+add CX, [c]
+sub AX, CX

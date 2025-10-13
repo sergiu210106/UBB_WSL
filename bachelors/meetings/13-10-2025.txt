@@ -1,0 +1,25 @@
+licenta - teams meeting 13.10.2025
+
+idee : intelligence tool
+
+detectare boti prin text preluat din comentariile unor site-uri:
+    - scrise reformulat
+    - multe intr-o anumita perioada si deloc in rest
+    - mesaj similar
+    - asocieri: X posteaza dupa Y in mod repetat, grupare in functie de fus orar/locatie
+    - in final se doreste un framework care sa fie folosit ca un plug-in care primeste site-uri si 
+    le parseaza pentru a gasi activitate neobisnuita
+    - 3 mari categorii de aplicabilitate
+
+1. Articole
+    - cyber-war: detectare boti care au scris comentarii cu acelasi mesaj
+    - site-uri parsabile: hotnews.ro, youtube, tik-tok, diverse
+
+2. Recenzii produse
+    - site-uri de referinta: istoricpreturi.info -> preturile de-a lungul timpului ale anumitor produse 
+    - x zice "E foarte buna, e silentioasa", y zice "E calitativa, nu scoate zgomot"
+    - site-uri de tip emag, altex
+
+3. CTI - mai greu
+    - worm-urile pe internet scaneaza continuu IP-urile infectate, se pun honeypot-uri pentru a lua datele atacatorului
+    - pattern-uri => se grupeaza atacatorii si se detecteaza atacuri in masa (tip DOS)
