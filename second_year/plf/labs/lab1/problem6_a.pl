@@ -14,7 +14,7 @@ counter(X, [H | T], N) :-
     counter(X, T, N).
 
 helper([], _, []).
-
+    
 helper([H | T], OriginalList, [H | ResultTail]) :-
     counter(H, OriginalList, N),
     N == 1,
