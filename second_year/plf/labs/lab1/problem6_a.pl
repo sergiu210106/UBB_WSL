@@ -16,7 +16,8 @@ counter(X, [H | T], N) :-
 helper([], _, []).
 
 helper([H | T], OriginalList, [H | ResultTail]) :-
-    counter(H, OriginalList, 1),
+    counter(H, OriginalList, N),
+    N == 1,
     helper(T, OriginalList, ResultTail).
 
 helper([H | T], OriginalList, Result) :-
@@ -25,5 +26,5 @@ helper([H | T], OriginalList, Result) :-
     helper(T, OriginalList, Result).
 
 remove_repeated(List, Result) :-
-    helper(List, List, Result).
+    helper(List, List, Result). 
 
