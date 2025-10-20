@@ -13,7 +13,8 @@ remove_all(H, [H | T], R) :-
     remove_all(H, T, R).
 
 max_element([], 0).
-max_element([E], E).
+max_element([E], E) :- 
+    !.
 
 max_element([H | T], R) :-
     max_element(T, R1),
