@@ -48,3 +48,8 @@ remove_duplicates([X, X | T], R) :-
 remove_duplicates([X, Y | T], [X | R]) :-
     X \= Y,
     remove_duplicates([Y | T], R).
+
+
+is_list([]).
+is_list([_ | T]) :- 
+    is_list(T).

@@ -1,0 +1,7 @@
+practical exam: 1h
+	- backtracking
+	- tips: do other problems in the homework
+
+
+second hour: 
+	- problem assignment 3
