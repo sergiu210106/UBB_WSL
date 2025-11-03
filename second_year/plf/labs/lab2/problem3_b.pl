@@ -17,8 +17,8 @@ process_list(L, R) :-
     msort(L, R1),
     remove_duplicates(R1, R).
 
-msort([], []).
-msort([X], [X]).
+msort([], []) :- !.
+msort([X], [X]) :- !.
 msort(L, S) :- 
     split(L, L1, L2),
     msort(L1, S1),
@@ -30,7 +30,7 @@ split([X], [X], []).
 split([X, Y | T], [X | L1], [Y | L2]) :- 
     split(T, L1, L2).
 
-merge([], L, L).
+merge([], L, L) :- !.
 merge(L, [], L).
 merge([X | XT], [Y | YT], [X | R]) :- 
     X =< Y,

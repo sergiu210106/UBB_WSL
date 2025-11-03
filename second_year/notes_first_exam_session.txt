@@ -1,0 +1,27 @@
+Salut. 
+Trimit aici lista cu examenele ce le avem semestru ăsta, parțiale și finale. Daca vedeți ca am omis ceva sau am greșit sa imi spuneți să modific.
+
+ Java :
+Laboratoare: săptămâna 7 si 11.
+Practical exam + written exam: in sesiune in aceiași zi
+
+ Prolog :
+Lab exam săptămâna 7/8 + 13/14
+Examen : săptămâna 14
+
+ Arhitectura Calculatoarelor :
+Midterm: săptămâna 8/9/10 la curs
+Practical exam: săptămâna 13/14 la lab
+Written Exam: in sesiune
+
+ Baze de Date :
+Practical exam: săptămâna 13/14 la lab
+Written Exam: in sesiune
+
+ Statistica :
+In sesiune
+
+ Sisteme Dinamice :
+Week 9/10 la seminar
+Week 13/14 la lab
+Examen in sesiune
