@@ -105,65 +105,87 @@ CREATE TABLE Inventory (
 );
 GO 
 
--- Inserting data
+-- =============================
+-- INSERT DATA (Improved Version)
+-- =============================
 
+-- Product Categories
 INSERT INTO ProductCategories (ID, [Name], [Description]) VALUES
 (101, 'Laptops', 'High-Performance computing devices.'),
 (102, 'Smartphones', 'Mobile communication and internet devices.'),
 (103, 'Accessories', 'Peripherals and supporting devices'),
 (104, 'Gaming Consoles', 'Dedicated gaming systems');
 
+-- Manufacturers
 INSERT INTO Manufacturers (ID, [Name], Country) VALUES 
 (201, 'TechCorp', 'USA'),
 (202, 'GlobalElectro', 'Japan'),
-(203, 'EuroDevices', 'Germany');
+(203, 'EuroDevices', 'Germany'),
+(204, 'DragonTech', 'China');
 
+-- Stores
 INSERT INTO Stores(ID, [Name], [Address]) VALUES 
 (301, 'Iulius Mall', 'Str. Alexandru Vaida-Voevod 53B'),
 (302, 'VIVO! Cluj-Napoca', 'Str. Avram Iancu 500'),
 (303, 'Online E-Store', 'Virtual Plaza 99, Cloud City');
 
+-- Shippers
 INSERT INTO Shippers(ID, CompanyName, Phone) VALUES 
 (401, 'Cargus', '0727347988'),
 (402, 'FAN', '0773798231'),
 (403, 'SameDay', '0768316731');
 
+-- Customers
 INSERT INTO Customers (ID, FirstName, LastName, Email, Phone, [Address]) VALUES 
-    (501, 'Alice', 'Smith', 'alice@mail.com', '555-1001', '10 Elm St'),
-(502, 'Bob', 'Johnson', NULL, '555-1002', '20 Oak Ave'), 
+(501, 'Alice', 'Smith', 'alice@mail.com', '555-1001', '10 Elm St'),
+(502, 'Bob', 'Johnson', NULL, '555-1002', '20 Oak Ave'),
 (503, 'Charlie', 'Brown', 'charlie@mail.com', '555-1003', '30 Pine Ln'),
-(504, 'Jane', 'Doe', 'jane@mail.com', '555-1004', '40 Cedar Pl'),
-(505, 'John', 'White', 'john@mail.com', '555-1005', '50 Birch Ct');
+(504, 'Jane', 'Doe', 'jane@mail.com', '555-1004', 'Str. Libertatii 45'),
+(505, 'John', 'White', 'john@mail.com', '555-1005', 'Str. Memorandumului 99'),
+(506, 'Andrew', 'Green', 'andrew@mail.com', NULL, '50 Birch Ct');
 
-
+-- Employees
 INSERT INTO Employees (ID, FirstName, LastName, [SID], Position) VALUES
 (601, 'David', 'Lee', 301, 'Manager'),
 (602, 'Eve', 'Adams', 301, 'Sales Associate'),
 (603, 'Frank', 'Harris', 302, 'Tech Specialist'),
 (604, 'Grace', 'Miller', 303, 'Online Support');
 
+-- Products
 INSERT INTO Products (ID, [Name], MID, CID, Model, UnitPrice) VALUES
 (701, 'Laptop Pro X1', 201, 101, 'LP-X1', 1899.99),
 (702, 'Laptop Budget A5', 202, 101, 'L-A5', 750.00),
 (703, 'Smartphone S20', 201, 102, 'S20', 1099.99),
 (704, 'Wireless Mouse', 203, 103, 'WM-01', 45.50), 
 (705, 'Gaming Console Z', 202, 104, 'GZ-Pro', 499.99), 
-(706, 'Tablet Lite', 201, 102, 'TL-02', 399.00);
+(706, 'Tablet Lite', 201, 102, 'TL-02', 399.00),
+(707, 'Gaming Console X', 204, 104, 'GX-01', 299.99), 
+(708, 'Smartphone Ultra 9', 204, 102, 'U9', 2100.00),
+(709, 'Laptop Eco C2', 203, 101, 'LE-C2', 520.00);
 
+-- Inventory
 INSERT INTO Inventory (ID, PID, [SID], Stock, LastUpdate) VALUES
 (801, 701, 301, 15, GETDATE()),
 (802, 702, 301, 20, GETDATE()),
 (803, 703, 302, 10, GETDATE()),
 (804, 704, 303, 100, GETDATE()),
-(805, 705, 302, 5, GETDATE());
+(805, 705, 302, 5, GETDATE()),
+(806, 706, 303, 25, GETDATE()),
+(807, 707, 301, 30, GETDATE()),
+(808, 708, 303, 2, GETDATE()),
+(809, 709, 302, 12, GETDATE());
 
+-- Sales
 INSERT INTO Sales (ID, CID, EID, [SID], [Date], Amount, [Status]) VALUES
 (901, 501, 602, 401, '2023-10-01', 1945.49, 'Completed'),
 (902, 503, 601, 402, '2023-10-05', 750.00, 'Completed'),
 (903, 501, 603, 401, '2023-10-10', 1099.99, 'Completed'),
 (904, 504, 604, 403, '2023-10-15', 91.00, 'Shipped'), 
-(905, 505, 602, 402, '2023-10-20', 499.99, 'Pending');
+(905, 505, 602, 402, '2023-10-20', 499.99, 'Pending'),
+(906, 506, 603, 403, '2023-11-01', 2100.00, 'Completed'),
+(907, 505, 601, 401, '2023-11-02', 299.99, 'Completed');
 
+-- SaleDetails
 INSERT INTO SaleDetails (ID, SaleID, PID, QUANTITY, Price) VALUES
 (1001, 901, 701, 1, 1899.99),
 (1002, 902, 702, 1, 750.00),
@@ -171,14 +193,15 @@ INSERT INTO SaleDetails (ID, SaleID, PID, QUANTITY, Price) VALUES
 (1004, 904, 704, 2, 45.50), 
 (1005, 905, 705, 1, 499.99), 
 (1006, 901, 704, 1, 45.50), 
-(1007, 905, 706, 1, 399.00);
-GO  
+(1007, 905, 706, 1, 399.00),
+(1008, 906, 708, 1, 2100.00),
+(1009, 907, 707, 1, 299.99);
 
 -- UPDATES
 -- slightly increase price for products using BETWEEN
 UPDATE Products
 SET UnitPrice = UnitPrice * 1.05
-WHERE UnitPrice BETWEEN 200.00 AND 400.00;  -- demonstrates BETWEEN
+WHERE UnitPrice BETWEEN 200.00 AND 400.00;  
 
 
 
@@ -202,8 +225,8 @@ SELECT * FROM Customers;
 
 GO
 -- VIOLATION
--- INSERT INTO Sales (ID, CID, EID, [SID], [Date], Amount, [Status])
--- VALUES (9999, 99999, 601, 401, '2025-10-01', 50.00, 'Completed');
+INSERT INTO Sales (ID, CID, EID, [SID], [Date], Amount, [Status])
+VALUES (9999, 99999, 601, 401, '2025-10-01', 50.00, 'Completed');
 
 -- SELECT QUERIES --
     -- a) UNION && OR
@@ -356,38 +379,41 @@ WHERE UnitPrice > ANY (SELECT UnitPrice FROM Products WHERE CID = 1);
     -- i.2) show products that are cheaper than all products made by manufacturer 2
 
 SELECT [Name], UnitPrice FROM Products 
-WHERE UnitPrice < ALL (SELECT UnitPrice FROM Products WHERE MID = 2);
+WHERE UnitPrice > ALL (SELECT UnitPrice FROM Products WHERE MID = 2);
 
     -- ANY with a different comparison
-    -- i.3) show customers who spent more than any sale amount made by employee 1  
+    -- i.3) show customers who spent equal to any sale amount made by employee 1  
 
 SELECT DISTINCT C.FirstName, C.LastName FROM Customers C  
 JOIN Sales S ON C.ID = S.CID
-WHERE S.Amount > ANY (SELECT Amount FROM Sales WHERE EID = 1);
+WHERE S.Amount = ANY (SELECT Amount FROM Sales WHERE EID = 1);
 
-    -- ALL with equality comparison 
+    -- ALL with inequality comparison 
     -- i.4) show employees who sold to all customers from the Sales table 
 
 SELECT DISTINCT EID FROM Sales 
-WHERE EID = ALL (SELECT EID FROM Sales WHERE Amount > 0);
+WHERE EID <> ALL (SELECT EID FROM Sales WHERE Amount > 0);
 
 
     -- rewritten i.1) : ANY -> MIN
 SELECT [Name], UnitPrice FROM Products 
 WHERE UnitPrice > (SELECT MIN(UnitPrice) FROM Products WHERE CID = 1);
 
-    -- rewritten i.2) : ALL -> MAX 
-SELECT [Name], UnitPrice FROM Products  
-WHERE UnitPrice < (SELECT MAX(UnitPrice) FROM Products WHERE MID = 2);
+    -- rewritten i.2) : ALL -> MIN
+SELECT [Name], UnitPrice FROM Products
+WHERE UnitPrice > (SELECT MAX(UnitPrice) FROM Products WHERE MID = 2);
 
     -- rewritten i.3) : ANY -> IN 
 SELECT DISTINCT C.FirstName, C.LastName FROM Customers C  
-JOIN Sales S ON C.ID = S.CID 
-WHERE S.Amount > 0 AND S.Amount IN (SELECT Amount FROM Sales WHERE EID = 1);
+JOIN Sales S ON C.ID = S.CID
+WHERE S.Amount IN (SELECT Amount FROM Sales WHERE EID = 1);
 
     -- rewritten i.4) : ALL -> NOT IN
-SELECT DISTINCT EID FROM Sales 
-WHERE EID NOT IN (SELECT EID FROM Sales WHERE Amount <= 0);
+SELECT ID FROM Employees
+WHERE ID NOT IN (
+    SELECT EID FROM Sales
+    WHERE Amount > 0
+);
 
     -- composed AND, OR, NOT in the WHERE clause #1
 SELECT Name, UnitPrice, Model FROM Products
