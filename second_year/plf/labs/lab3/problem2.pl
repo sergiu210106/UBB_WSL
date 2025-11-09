@@ -16,7 +16,7 @@ prime(N) :-
     N > 2,
     \+ has_factor(N, 2).
 has_factor(N, F) :- 
-    N mod F =:= 0.
+    N mod F =:= 0, !.
 has_factor(N, F) :- 
     F * F < N,
     F1 is F + 1,
@@ -36,13 +36,13 @@ primes_up_to(N, L) :-
 collect_primes(Current, N, []) :-
     Current > N, !.
 collect_primes(Current, N, [Current | R]) :- 
-    Current <= N, 
+    Current =< N, 
     prime(Current), !, 
     Next is Current + 1,
     collect_primes(Next, N, R).
 
 collect_primes(Current, N, R) :- 
-    Current <= N,
+    Current =< N,
     \+ prime(Current), 
     Next is Current + 1,
     collect_primes(Next, N, R).
