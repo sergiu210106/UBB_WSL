@@ -21,7 +21,7 @@ maux([H1, H2 | T], 1) :-
     maux([H2 | T], 1),!.
 
 mountain([H1, H2 | T]) :-
-    H1 =< H2,
+    H1 < H2,
     maux([H2 | T], 0).
 
 
