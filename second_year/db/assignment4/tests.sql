@@ -1,13 +1,3 @@
-USE master;
-GO
--- Drop the database if it exists to start fresh
-IF DB_ID('Lab4_DB') IS NOT NULL
-BEGIN
-    ALTER DATABASE ElectronicSalesDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-    DROP DATABASE ElectronicSalesDB;
-END
-GO
-
 -- Create the database
 CREATE DATABASE ElectronicSalesDB;
 GO
@@ -16,7 +6,7 @@ USE ElectronicSalesDB;
 GO
 
 -------------------------------------------------------------------
--- PART 1: ORIGINAL DATABASE SCHEMA (from the prompt)
+-- PART 1: ORIGINAL DATABASE SCHEMA 
 -------------------------------------------------------------------
 CREATE TABLE ProductCategories (
     ID INT PRIMARY KEY,
@@ -175,6 +165,21 @@ CREATE TABLE TestRunViews (
 );
 GO
 
+
+CREATE TABLE ProductStoreStock (
+    PID INT NOT NULL,
+    SID INT NOT NULL,
+    Stock INT NOT NULL,
+    LastUpdate DATETIME NOT NULL DEFAULT GETDATE(),
+
+    PRIMARY KEY (PID, SID),
+    FOREIGN KEY (PID) REFERENCES Products(ID),
+    FOREIGN KEY (SID) REFERENCES Stores(ID)
+);
+GO
+
+
+
 -------------------------------------------------------------------
 -- PART 3: TEST VIEWS
 -------------------------------------------------------------------
@@ -234,11 +239,14 @@ INSERT INTO Views ([Name]) VALUES ('vw_SingleTable'), ('vw_ProductDetails'), ('v
 -- Configure tables and their deletion order (Position)
 INSERT INTO TestTables (TestID, TableID, [Position], NoOfRows)
 VALUES 
-    (@TestID, (SELECT ID FROM Tables WHERE [Name] = 'Inventory'), 0, 2000),          -- Delete 1st (child)
-    (@TestID, (SELECT ID FROM Tables WHERE [Name] = 'Products'), 1, 1000),           -- Delete 2nd (child)
-    (@TestID, (SELECT ID FROM Tables WHERE [Name] = 'Stores'), 2, 50),               -- Delete 3rd (parent)
-    (@TestID, (SELECT ID FROM Tables WHERE [Name] = 'Manufacturers'), 3, 100),       -- Delete 4th (parent)
-    (@TestID, (SELECT ID FROM Tables WHERE [Name] = 'ProductCategories'), 4, 20);     -- Delete 5th (parent)
+    (@TestID, (SELECT ID FROM Tables WHERE [Name] = 'Inventory'), 0, 2000),         
+    (@TestID, (SELECT ID FROM Tables WHERE [Name] = 'Products'), 1, 1000),          
+    (@TestID, (SELECT ID FROM Tables WHERE [Name] = 'Stores'), 2, 50),               
+    (@TestID, (SELECT ID FROM Tables WHERE [Name] = 'Manufacturers'), 3, 100),       
+    (@TestID, (SELECT ID FROM Tables WHERE [Name] = 'ProductCategories'), 4, 20),
+    (@TestID, (SELECT ID FROM Tables WHERE [Name] = 'ProductStoreStock'),0,       -- children first
+    5000     -- or any number you want for testing
+);  
 
 -- Configure which views are part of our test
 INSERT INTO TestViews (TestID, ViewID)
@@ -249,7 +257,7 @@ VALUES
 GO
 
 
-USE ElectronicSalesDB; -- Use your correct database name
+USE ElectronicSalesDB;
 GO
 
 -------------------------------------------------------------------
@@ -278,14 +286,14 @@ PRINT N'Cleanup complete.';
 GO
 
 -------------------------------------------------------------------
--- STEP 2: Configure the NEW, Self-Contained Test
+-- STEP 2: Configure the Self-Contained Test
 -------------------------------------------------------------------
 PRINT N'Setting up the new, self-contained test configuration...';
 INSERT INTO Tests ([Name], Description) VALUES ('Core Performance Test', 'Tests a self-contained set of tables and views.');
 DECLARE @TestID INT = SCOPE_IDENTITY();
 
 -- Register ONLY the tables needed for this self-contained test
-INSERT INTO Tables ([Name]) VALUES ('ProductCategories'), ('Manufacturers'), ('Stores'), ('Products'), ('Inventory');
+INSERT INTO Tables ([Name]) VALUES ('ProductCategories'), ('Manufacturers'), ('Stores'), ('Products'), ('Inventory'), ('ProductStoreStock');
 -- Register the views we will use for testing
 INSERT INTO Views ([Name]) VALUES ('vw_SingleTable'), ('vw_ProductDetails'), ('vw_SalesByCategory');
 
@@ -308,9 +316,7 @@ VALUES
 PRINT N'Configuration setup complete.';
 GO
 
--------------------------------------------------------------------
--- STEP 3: Final Stored Procedure (No more changes needed)
--------------------------------------------------------------------
+
 CREATE OR ALTER PROCEDURE sp_RunTest
     @TestName VARCHAR(100)
 AS
@@ -347,7 +353,6 @@ BEGIN
         DECLARE @InsertStartTime DATETIME = GETDATE(); DECLARE @i INT = 1;
         WHILE @i <= @NoOfRows
         BEGIN
-            -- NOTE: The Employees case is removed.
             SET @sql = 
                 CASE @TableName
                     WHEN 'ProductCategories' THEN N'INSERT INTO ProductCategories (ID, Name) VALUES (' + CAST(@i AS VARCHAR(10)) + ', ''Category ' + CAST(@i AS VARCHAR(10)) + ''');'
@@ -355,6 +360,13 @@ BEGIN
                     WHEN 'Stores' THEN N'INSERT INTO Stores (ID, Name, Address) VALUES (' + CAST(@i AS VARCHAR(10)) + ', ''Store ' + CAST(@i AS VARCHAR(10)) + ''', ''Address ' + CAST(@i AS VARCHAR(10)) + ''');'
                     WHEN 'Products' THEN N'INSERT INTO Products (ID, Name, MID, CID, Model, UnitPrice) VALUES (' + CAST(@i AS VARCHAR(10)) + ', ''Product ' + CAST(@i AS VARCHAR(10)) + ''', ' + CAST((@i % 100 + 1) AS VARCHAR(10)) + ', ' + CAST((@i % 20 + 1) AS VARCHAR(10)) + ', ''Model_' + CAST(@i AS VARCHAR(10)) + ''', ' + CAST((@i * 10.5 + 50) AS VARCHAR(20)) + ');'
                     WHEN 'Inventory' THEN N'INSERT INTO Inventory (ID, PID, SID, Stock, LastUpdate) VALUES (' + CAST(@i AS VARCHAR(10)) + ', ' + CAST((@i % 1000 + 1) AS VARCHAR(10)) + ', ' + CAST((@i % 50 + 1) AS VARCHAR(10)) + ', ' + CAST((@i * 5 + 10) AS VARCHAR(10)) + ', GETDATE());'
+                    WHEN 'ProductStoreStock' THEN 
+                    N'INSERT INTO ProductStoreStock (PID, SID, Stock, LastUpdate) 
+                    VALUES (' 
+                    + CAST((@i % 1000 + 1) AS VARCHAR(10)) + ', '
+                    + CAST((@i % 50 + 1) AS VARCHAR(10)) + ', '
+                    + CAST((@i * 3 + 5) AS VARCHAR(10)) + ', GETDATE());'
+
                     ELSE N''
                 END;
             IF @sql <> N'' EXEC sp_executesql @sql; SET @i = @i + 1;
