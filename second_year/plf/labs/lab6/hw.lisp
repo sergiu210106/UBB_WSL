@@ -7,3 +7,5 @@
     (t (cons (car tree) (mapcan #'pre-order (cdr tree))))
   )
 )
+; (A (B) (C (D) (E)))
+; (A (B (D (E () (F)) ()) (G)) (C () (H)))
