@@ -244,9 +244,10 @@ VALUES
     (@TestID, (SELECT ID FROM Tables WHERE [Name] = 'Stores'), 2, 50),               
     (@TestID, (SELECT ID FROM Tables WHERE [Name] = 'Manufacturers'), 3, 100),       
     (@TestID, (SELECT ID FROM Tables WHERE [Name] = 'ProductCategories'), 4, 20),
-    (@TestID, (SELECT ID FROM Tables WHERE [Name] = 'ProductStoreStock'),0,       -- children first
-    5000     -- or any number you want for testing
-);  
+    (@TestID, (SELECT ID FROM Tables WHERE [Name] = 'ProductStoreStock'),0,5000);  
+
+
+
 
 -- Configure which views are part of our test
 INSERT INTO TestViews (TestID, ViewID)
@@ -256,9 +257,6 @@ VALUES
     (@TestID, (SELECT ID FROM Views WHERE [Name] = 'vw_SalesByCategory'));
 GO
 
-
-USE ElectronicSalesDB;
-GO
 
 -------------------------------------------------------------------
 -- STEP 1: Robust Cleanup of ALL Previous Test Data
@@ -413,6 +411,10 @@ PRINT N'--- VERIFICATION ---';
 PRINT N'Recent Test Runs:';
 SELECT tr.ID AS TestRunID, t.[Name] AS TestName, tr.StartTime, tr.EndTime, DATEDIFF(second, tr.StartTime, tr.EndTime) AS DurationSeconds, tr.[Status]
 FROM TestRuns tr JOIN Tests t ON tr.TestID = t.ID ORDER BY tr.StartTime DESC;
+
+select * from TestRuns
+select * from TestRunTables
+select * from TestRunViews
 
 PRINT N''; PRINT N'Performance for Table Inserts:';
 SELECT trt.TestRunID, T.[Name] AS TableName, trt.ExecutionTimeMS
