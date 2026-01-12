@@ -52,7 +52,6 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- VALIDATION using UDFs
     IF @Action IN ('CREATE', 'UPDATE')
     BEGIN
         IF dbo.ufn_ValidatePrice(@UnitPrice) = 0
@@ -184,65 +183,11 @@ GO
 CREATE NONCLUSTERED INDEX IX_Products_Name ON Products([Name]);
 GO
 
--- Create a non-clustered index on Sales CID (Customer ID) to facilitate joins/scans
-CREATE NONCLUSTERED INDEX IX_Sales_CID ON Sales(CID);
-GO
 
-
-/* ================================================================================
-TEST DATA POPULATION
-================================================================================ */
-USE ElectronicSalesDB;
-GO
-
--- 1. Insert Categories
-INSERT INTO ProductCategories (ID, [Name], [Description]) VALUES 
-(1, 'Smartphones', 'Mobile handheld devices'),
-(2, 'Laptops', 'Portable personal computers'),
-(3, 'Audio', 'Headphones and speakers');
-
--- 2. Insert Manufacturers
-INSERT INTO Manufacturers (ID, [Name], Country) VALUES 
-(1, 'Apple', 'USA'),
-(2, 'Samsung', 'South Korea'),
-(3, 'Sony', 'Japan');
-
--- 3. Insert Stores
-INSERT INTO Stores (ID, [Name], [Address]) VALUES 
-(1, 'TechHub Downtown', '123 Main St'),
-(2, 'Electronics World', '456 North Ave');
-
--- 4. Insert Shippers
-INSERT INTO Shippers (ID, CompanyName, Phone) VALUES 
-(1, 'FastShip Co', '555-0101'),
-(2, 'Global Logistics', '555-0102');
-
--- 5. Insert Customers
-INSERT INTO Customers (ID, FirstName, LastName, Email, Phone, [Address]) VALUES 
-(1, 'John', 'Doe', 'john.doe@email.com', '555-1234', '789 Oak St'),
-(2, 'Jane', 'Smith', 'jane.smith@email.com', '555-5678', '321 Pine St');
-
--- 6. Insert Employees
-INSERT INTO Employees (ID, FirstName, LastName, [SID], Position) VALUES 
-(1, 'Alice', 'Johnson', 1, 'Manager'),
-(2, 'Bob', 'Wilson', 2, 'Sales Associate');
-
--- 7. Insert Initial Products (Using the Stored Procedure)
+-- Insert Initial Products (Using the Stored Procedure)
 EXEC dbo.usp_ManageProduct 'CREATE', 10, 'iPhone 15', 1, 1, 'A3090', 999.99;
 EXEC dbo.usp_ManageProduct 'CREATE', 20, 'Galaxy S23', 2, 1, 'SM-S911', 799.99;
 EXEC dbo.usp_ManageProduct 'CREATE', 30, 'WH-1000XM5', 3, 3, 'SONY-WH1000', 349.99;
-
--- 8. Insert Sales
-INSERT INTO Sales (ID, CID, EID, [SID], [Date], Amount, [Status]) VALUES 
-(1, 1, 1, 1, GETDATE(), 1349.98, 'Completed'),
-(2, 2, 2, 2, GETDATE(), 799.99, 'Completed');
-
--- 9. Insert SaleDetails (This will trigger the Audit Log)
-INSERT INTO SaleDetails (ID, SaleID, PID, QUANTITY, Price) VALUES 
-(1, 1, 10, 1, 999.99),
-(2, 1, 30, 1, 349.99),
-(3, 2, 20, 1, 799.99);
-GO
 
 SELECT * FROM TableAuditLog;
 SELECT * FROM dbo.vw_SalesPerformanceDetail;

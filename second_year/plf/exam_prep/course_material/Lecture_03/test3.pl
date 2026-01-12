@@ -1,0 +1,14 @@
+p(a,b).
+p(c,d).
+p(e,f).
+all:-
+    p(X,Y),
+    write(X),
+    write(Y),
+    nl,
+    fail.
+all1:-
+    p(X,Y),
+    write(X),
+    write(Y),
+    nl.

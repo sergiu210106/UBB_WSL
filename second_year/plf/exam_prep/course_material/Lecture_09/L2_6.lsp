@@ -1,0 +1,45 @@
+; Sort a list using quick-sort.
+
+(defun insert_pair (p e pair)
+    (cond
+        ((< p e) (cons (car pair) (cons e (cdr pair))))
+        (t       (cons (cons e (car pair)) (cdr pair)))
+    )
+)
+(defun partition (p a pair)
+    (cond
+        ((null a) pair)
+        (t (insert_pair p (car a) (partition p (cdr a) pair)))
+    )
+)
+
+(defun qs_aux (e pair)
+    (append (quick_sort (car pair)) (cons e (quick_sort (cdr pair))))
+)
+
+(defun quick_sort (l)
+    (cond
+        ((null l) ())
+        (t (qs_aux (car l) (partition (car l) (cdr l) '(().()))))
+    )
+)
+
+(write (car (insert_pair 5 3 '((1 2) . (7 8)))))
+(write-line "")
+(write (cdr (insert_pair 5 3 '((1 2) . (7 8)))))
+(write-line "")
+(write (car (insert_pair 5 6 '((1 2) . (7 8)))))
+(write-line "")
+(write (cdr (insert_pair 5 6 '((1 2) . (7 8)))))
+(write-line "")
+(write (car '((1 2) . (7 8))))
+(write-line "")
+(write (cdr '((1 2) . (7 8))))
+(write-line "")
+(write (partition 5 '(1 2 3 4 6 7 8 9) '(().())))
+(write-line "")
+(write (car (partition 5 '(1 2 3 4 6 7 8 9) '(().()))))
+(write-line "")
+(write (cdr (partition 5 '(1 2 3 4 6 7 8 9) '(().()))))
+(write-line "")
+(write (quick_sort '(1 5 9 6 2 4 8 7 3 3 7 8 6 2 4 9 5 1)))
