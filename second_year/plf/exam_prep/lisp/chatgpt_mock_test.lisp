@@ -72,3 +72,15 @@
     (t apply #'+ (mapcar (lambda (c) (sum-odd c (+ level 1)) lst)))
   )
 )
+
+(defun flatten(lst)
+  (mapcan 
+    (lambda (e)
+      (cond  
+        ((atom e) (list e))
+        (t (flatten e))
+      )
+    )
+    lst
+  )
+)

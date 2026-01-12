@@ -20,7 +20,7 @@ valid([_]).
 valid([A, B | T]) :-
     D is A - B,
     (D =:= 1 ; D =:= 2 ; D =:= -1 ; D =:= -2),
-    valid([B | T])
+    valid([B | T]).
 
 solve(N, [0 | R]) :-
     N1 is 2*N,
