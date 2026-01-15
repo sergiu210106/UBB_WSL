@@ -29,7 +29,7 @@
 (defun path (tree x)
   (cond  
     ((null tree) nil)
-    ((equal (car tree) x) (list x))
+    ((= (car tree) x) (list x))
     (t  
       (cond  
         ((path (get_left tree) x) 

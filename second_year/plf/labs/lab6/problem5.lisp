@@ -9,18 +9,22 @@
 )
 
 (defun skip (lst n e)
-    ((null lst) nil)
-    ((= e (- n 1)) lst)
-    (t  
-        (skip (cddr lst) (+ 1 n) (+ (cadr l) e))
+    (cond  
+        ((null lst) nil)
+        ((= e (- n 1)) lst)
+        (t  
+            (skip (cddr lst) (+ 1 n) (+ (cadr lst) e))
+        )    
     )
 )
 
 (defun get-subtree (lst n e)
-    ((null lst) nil)
-    ((= e (- n 1)) nil)
-    (t  
-        (cons (car lst) (cons (cadr l) (get-subtree (cddr lst) (+ 1 n) (+ (cadr l) e))))
+    (cond  
+        ((null lst) nil)
+        ((= e (- n 1)) nil)
+        (t  
+            (cons (car lst) (cons (cadr lst) (get-subtree (cddr lst) (+ 1 n) (+ (cadr lst) e))))
+        )    
     )
 )
 

@@ -31,7 +31,7 @@
 (defun convert (lst)
     (cond  
         ((null lst) nil)
-        (t (cons (car lst) (convert lst (cadr lst))))
+        (t (cons (car lst) (convert_subtrees lst (cadr lst))))
     )
 )
 
