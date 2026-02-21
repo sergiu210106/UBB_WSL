@@ -37,5 +37,5 @@ length([H|T], R) :-
 colinear_subsets(Points, Subset) :- 
     length(Points, N),
     between(3,N,K),
-    subset(N, Points, Subset),
+    subset(K, Points, Subset),
     all_colinear(Subset).

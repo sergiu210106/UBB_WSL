@@ -4,7 +4,19 @@
     (cond  
         ((atom lst) lst)
         (t
-            (reverse (mapcar #'deep-reverse lst))
+            (my-reverse (mapcar #'deep-reverse lst))
+        )
+    )
+)
+
+(defun my-reverse (lst) 
+    (cond 
+        ((null lst) nil)
+        (t 
+            (append 
+                (my-reverse (cdr lst))
+                (list (car lst))
+            )
         )
     )
 )

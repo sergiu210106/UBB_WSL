@@ -2,6 +2,7 @@
 
 (defun subs(lst x y)
     (cond  
+        ((null lst) nil)
         ((equal lst x) y)
         ((atom lst) lst)
         (t  
