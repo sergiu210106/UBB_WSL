@@ -32,8 +32,6 @@ The experiments were conducted on two problem instances of varying complexity.
 **4. Comparative Results**
 The experiments measured the best value found, the average best value, and the average execution time. The results are summarized below:
 
-*(Note: Insert the content of your generated output.md file here. Example format included for reference)*
-
 | Instance             | Runs   | K (Evaluations) | Best Value (Max)   | Avg Best Value  | Avg Time (s) |
 |---|---|---|---|---|---|
 | ../a1/knapsack-20.txt | 25     | 10              | 681                | 395.40          | 0.0000       |
