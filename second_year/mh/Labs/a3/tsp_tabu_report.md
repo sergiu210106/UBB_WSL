@@ -140,24 +140,26 @@ Greedy baseline: **46,678.15**
 
 Average time per run: ~0.16 s (100 iter) → ~1.65 s (1,000 iter)
 
-### 4.2 zi929 (n = 929) — partial results
+### 4.2 zi929 (n = 929)
 
 Greedy baseline: **101,657.54** *(nearest-neighbour from city 0)*
 
-| Max Iter | Tenure | Best Cost   | Improvement over greedy | Avg Time (s) |
-|----------|--------|-------------|------------------------|--------------|
-| 100      | 5      | 100,188.67  | 1.44 %                 | 17.59        |
-| 100      | 10     | 100,188.67  | 1.44 %                 | 17.88        |
-| 100      | 20     | 100,188.67  | 1.44 %                 | 17.78        |
-| 100      | 50     | 100,188.67  | 1.44 %                 | 17.94        |
-| 500      | 5      | 99,810.50   | 1.82 %                 | 91.86        |
-| 500      | 10     | 99,810.50   | 1.82 %                 | 89.82        |
-| 500      | 20     | 99,806.95   | 1.82 %                 | 87.34        |
-| 500      | 50     | 99,752.90   | 1.87 %                 | 87.42        |
-| 1,000    | 5      | 99,810.50   | 1.82 %                 | 179.29       |
-| 1,000    | 10     | *(running)* | —                      | est. ~179 s  |
-| 1,000    | 20     | *(running)* | —                      | est. ~179 s  |
-| 1,000    | 50     | *(running)* | —                      | est. ~179 s  |
+Note: the experiment was stopped after the tenure=10 configuration at 1,000 iterations due to time constraints. The tenure=20 and tenure=50 rows at 1,000 iterations were not completed.
+
+| Max Iter | Tenure | Best Cost      | Improvement over greedy | Avg Time (s) |
+|----------|--------|----------------|------------------------|--------------|
+| 100      | 5      | 100,188.67     | 1.44 %                 | 17.59        |
+| 100      | 10     | 100,188.67     | 1.44 %                 | 17.88        |
+| 100      | 20     | 100,188.67     | 1.44 %                 | 17.78        |
+| 100      | 50     | 100,188.67     | 1.44 %                 | 17.94        |
+| 500      | 5      | 99,810.50      | 1.82 %                 | 91.86        |
+| 500      | 10     | 99,810.50      | 1.82 %                 | 89.82        |
+| 500      | 20     | 99,806.95      | 1.82 %                 | 87.34        |
+| **500**  | **50** | **99,752.90**  | **1.87 %**             | 87.42        |
+| 1,000    | 5      | 99,810.50      | 1.82 %                 | 179.29       |
+| 1,000    | 10     | 99,810.50      | 1.82 %                 | 180.60       |
+| 1,000    | 20     | *(not run)*    | —                      | —            |
+| 1,000    | 50     | *(not run)*    | —                      | —            |
 
 ---
 
@@ -173,7 +175,7 @@ For pr107, the gap between tenure=5 and tenure=50 at 1,000 iterations is 44,646 
 
 For pr107, the best cost for each tenure value **does not improve beyond 100 iterations** for tenures 5 and 10, suggesting the search converges very quickly from the greedy starting point. For tenure=20 and 50, the best cost does improve from 100 → 500 iterations but then plateaus. This indicates that for a 107-city instance with a good warm start, 500 iterations is already sufficient.
 
-For zi929, increasing from 100 to 500 iterations yields a clear improvement (~0.4%), confirming the search is still making useful progress at that scale. However, the first completed 1,000-iteration result (tenure=5) produces **99,810.50 — identical to the 500-iteration result for the same tenure**. This mirrors the pattern seen in pr107: once tenure=5's short memory is exhausted, the search converges to the same local optimum regardless of whether it is given 500 or 1,000 iterations. The 1,000-iteration results for higher tenures (10, 20, 50) are still running; based on the pr107 pattern, tenure=50 is the configuration most likely to yield further improvement with the larger iteration budget.
+For zi929, increasing from 100 to 500 iterations yields a clear improvement (~0.4%), confirming the search is still making useful progress at that scale. The two completed 1,000-iteration results (tenure=5 and tenure=10) both produce **99,810.50 — identical to their 500-iteration counterparts**. This is consistent with the pr107 pattern: low tenures cause the search to converge to the same local optimum well before the iteration budget is exhausted, making additional iterations wasteful. The results for tenure=20 and tenure=50 at 1,000 iterations were not obtained due to time constraints (~3 hours per configuration at this instance size), but based on the pr107 pattern, tenure=50 is the configuration most likely to have yielded further improvement.
 
 ### Determinism and run variance
 
