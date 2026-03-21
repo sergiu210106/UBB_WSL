@@ -20,7 +20,7 @@ Two benchmark instances from the TSPLIB library were used:
 | Instance | Group | Cities (n) | Greedy baseline cost |
 |----------|-------|-----------|----------------------|
 | pr107    | A     | 107       | 46,678.15            |
-| zi929    | B     | 929       | (computed per run)   |
+| zi929    | B     | 929       | 117733.70            |
 
 ---
 
